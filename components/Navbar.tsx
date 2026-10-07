@@ -1,158 +1,253 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Compass, Menu, X, ChevronRight, Phone, MapPin, Sparkles } from 'lucide-react';
+import { Menu, X, ChevronRight, Phone, Globe, ChevronDown } from 'lucide-react';
+import { useLanguage, SUPPORTED_LANGUAGES, LanguageCode } from '@/context/LanguageContext';
+import Logo from '@/components/Logo';
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setIsScrolled]         = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const pathname = usePathname();
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const pathname  = usePathname();
+  const { language, setLanguage, t } = useLanguage();
+  const langRef   = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setLangDropdownOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Lock body scroll when mobile menu open
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileMenuOpen]);
+
   const navLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'About Us', href: '/about' },
-    { name: 'Services', href: '/services' },
-    { name: 'Locations', href: '/locations' },
-    { name: 'Travel Quiz', href: '/quiz' },
-    { name: 'Trip Planner', href: '/planner' },
-    { name: 'Contact', href: '/contact' },
+    { name: t('nav.home'),         href: '/' },
+    { name: t('nav.destinations'), href: '/locations' },
+    { name: t('nav.experiences'),  href: '/services' },
+    { name: 'Trip Quiz',           href: '/quiz' },
+    { name: t('nav.about'),        href: '/about' },
+    { name: t('nav.contact'),      href: '/contact' },
   ];
+
+  const currentLangObj = SUPPORTED_LANGUAGES.find((l) => l.code === language) || SUPPORTED_LANGUAGES[0];
+  const isHome = pathname === '/';
 
   return (
     <>
-      {/* Top Banner (Desktop & Tablet) */}
-      <div className="bg-brand-950 text-white text-xs py-2 px-4 border-b border-emerald-900/50 hidden md:block">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-6 text-emerald-200">
-            <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-brand-500" /> +94 11 234 5678</span>
-            <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-brand-500" /> Colombo, Sri Lanka</span>
-            <span className="text-amber-400 font-medium flex items-center gap-1">★ 4.9 Rating (500+ Verified Reviews)</span>
+      {/* ── Top Info Bar ─────────────────────────────────────────── */}
+      <div className="bg-brand-900 text-white text-xs py-2 hidden md:block border-b border-brand-800/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+
+          <div className="flex items-center gap-6 text-white/80">
+            <span className="flex items-center gap-1.5 font-medium">
+              <Phone className="w-3 h-3 text-gold-400" />
+              +94 77 123 4567
+            </span>
+            <span className="text-white/55">hello@araliyaceylon.com</span>
+            <span className="text-gold-300 font-semibold">
+              ★ 4.9 · Sri Lanka Local Travel Specialist
+            </span>
           </div>
-          <div className="flex items-center space-x-4">
-            <Link href="/quiz" className="flex items-center gap-1 text-emerald-300 hover:text-white transition">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" /> Take Travel Quiz
-            </Link>
+
+          {/* Language selector */}
+          <div className="relative" ref={langRef}>
+            <button
+              onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+              className="flex items-center gap-1.5 text-white/80 hover:text-white px-2.5 py-1 rounded-full bg-brand-800 border border-brand-700 transition-colors text-xs"
+              aria-label="Select language"
+            >
+              <Globe className="w-3.5 h-3.5 text-gold-400" />
+              <span className="font-semibold">{currentLangObj.flag} {currentLangObj.nativeName}</span>
+              <ChevronDown className="w-3 h-3 opacity-60" />
+            </button>
+
+            {langDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-xl shadow-2xl border border-cream-300 py-1.5 z-50 animate-fade-in">
+                <div className="px-3 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 mb-1">
+                  Select Language
+                </div>
+                {SUPPORTED_LANGUAGES.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => { setLanguage(lang.code as LanguageCode); setLangDropdownOpen(false); }}
+                    className={`w-full text-left px-3.5 py-2 text-xs flex items-center justify-between transition-colors ${
+                      language === lang.code
+                        ? 'bg-brand-50 text-brand-700 font-bold'
+                        : 'hover:bg-cream-100 text-gray-700'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>{lang.flag}</span>
+                      <span>{lang.nativeName}</span>
+                    </span>
+                    <span className="text-[10px] text-gray-400">{lang.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Main Navbar */}
+      {/* ── Main Navbar ─────────────────────────────────────────── */}
       <header
-        className={`sticky top-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-brand-900/95 backdrop-blur-md text-white shadow-lg border-b border-brand-800'
-            : 'bg-brand-900/90 text-white border-b border-brand-800/80 backdrop-blur-sm'
+        className={`sticky top-0 z-40 transition-all duration-400 ${
+          isScrolled || !isHome
+            ? 'bg-white/97 backdrop-blur-md border-b border-cream-300 shadow-nav'
+            : 'bg-white/95 backdrop-blur-sm border-b border-cream-200/80'
         }`}
+        style={{ backdropFilter: 'blur(12px)' }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            {/* Brand Logo */}
-            <Link href="/" className="flex items-center space-x-3 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
-                <Compass className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-display font-extrabold text-2xl tracking-tight text-white group-hover:text-emerald-300 transition-colors">
-                  Lanka<span className="text-emerald-400">Vista</span>
-                </span>
-                <span className="text-[10px] uppercase tracking-widest text-emerald-300 font-semibold -mt-1">
-                  Discover Sri Lanka
-                </span>
-              </div>
+          <div className="flex items-center justify-between h-[72px]">
+
+            {/* Logo */}
+            <Link href="/" className="group shrink-0" aria-label="Araliya Ceylon — Home">
+              <Logo size="md" variant="dark" />
             </Link>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2">
+            {/* Desktop Nav */}
+            <nav className="hidden lg:flex items-center gap-0.5" aria-label="Main navigation">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href;
                 return (
                   <Link
                     key={link.name}
                     href={link.href}
-                    className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    className={`relative px-3.5 py-2 rounded-full text-[0.82rem] font-600 font-semibold transition-all duration-200 ${
                       isActive
-                        ? 'text-emerald-300 bg-brand-800/60 font-semibold border-b-2 border-emerald-400'
-                        : 'text-gray-200 hover:text-white hover:bg-brand-800/40'
+                        ? 'text-brand-700 bg-brand-50'
+                        : 'text-gray-600 hover:text-brand-700 hover:bg-cream-200/80'
                     }`}
                   >
                     {link.name}
+                    {isActive && (
+                      <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-gold-500 rounded-full" />
+                    )}
                   </Link>
                 );
               })}
             </nav>
 
-            {/* CTA Button */}
-            <div className="hidden sm:flex items-center space-x-3">
+            {/* Desktop CTA */}
+            <div className="hidden sm:flex items-center gap-3">
               <Link
                 href="/planner"
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-500 to-emerald-600 hover:from-brand-600 hover:to-emerald-700 text-white font-semibold text-sm shadow-md hover:shadow-emerald-900/40 hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-1.5"
+                className="btn-yellow text-xs px-5 py-2.5"
               >
-                <span>Plan Your Trip</span>
-                <ChevronRight className="w-4 h-4" />
+                {t('nav.planner')}
+                <ChevronRight className="w-3.5 h-3.5" />
               </Link>
             </div>
 
-            {/* Mobile Hamburger Button */}
-            <div className="flex lg:hidden items-center space-x-2">
-              <Link
-                href="/planner"
-                className="sm:hidden px-3 py-1.5 rounded-lg bg-emerald-500 text-white text-xs font-semibold"
-              >
-                Plan Trip
-              </Link>
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2.5 rounded-xl bg-brand-800 text-gray-200 hover:text-white hover:bg-brand-700 focus:outline-none"
-                aria-label="Toggle menu"
-              >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
+            {/* Mobile toggle */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2.5 rounded-full text-gray-700 hover:text-brand-700 hover:bg-cream-200 transition-colors"
+              aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen
+                ? <X className="w-5 h-5" />
+                : <Menu className="w-5 h-5" />
+              }
+            </button>
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer */}
+        {/* ── Mobile Drawer ────────────────────────────────────── */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-brand-950 border-t border-brand-800 px-4 pt-3 pb-6 space-y-2 shadow-2xl animate-in slide-in-from-top duration-300">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${
-                    isActive
-                      ? 'bg-brand-800 text-emerald-300 font-semibold border-l-4 border-emerald-400'
-                      : 'text-gray-300 hover:bg-brand-900 hover:text-white'
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-            <div className="pt-4 border-t border-brand-800/80">
+          <div className="lg:hidden fixed inset-0 top-[72px] z-50 bg-white/98 backdrop-blur-lg px-5 pt-6 pb-10 overflow-y-auto"
+               style={{ borderTop: '1px solid #E8DFD0' }}>
+
+            {/* Language strip */}
+            <div className="mb-6 pb-4 border-b border-cream-300 flex items-center justify-between flex-wrap gap-3">
+              <span className="text-xs font-semibold text-gray-500 flex items-center gap-1.5">
+                <Globe className="w-4 h-4 text-brand-600" /> Language:
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {SUPPORTED_LANGUAGES.map((l) => (
+                  <button
+                    key={l.code}
+                    onClick={() => setLanguage(l.code as LanguageCode)}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
+                      language === l.code
+                        ? 'bg-brand-700 text-white'
+                        : 'bg-cream-200 text-gray-700 border border-cream-300 hover:border-brand-400'
+                    }`}
+                  >
+                    {l.flag} {l.nativeName}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Links */}
+            <nav className="space-y-1 mb-6">
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-semibold transition-colors ${
+                      isActive
+                        ? 'bg-brand-700 text-white'
+                        : 'text-gray-700 hover:bg-cream-200 hover:text-brand-700'
+                    }`}
+                  >
+                    {link.name}
+                    <ChevronRight className={`w-4 h-4 ${isActive ? 'text-gold-300' : 'text-gray-400'}`} />
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* CTA */}
+            <div className="space-y-3">
               <Link
                 href="/planner"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center block py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-base shadow-md"
+                className="btn-yellow w-full text-center text-sm py-3.5 justify-center"
               >
-                Plan Your Trip Now
+                {t('nav.planner')}
               </Link>
+              <Link
+                href="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="btn-outline w-full text-center text-sm py-3.5 justify-center"
+              >
+                {t('nav.contact')}
+              </Link>
+            </div>
+
+            {/* Contact */}
+            <div className="mt-6 pt-5 border-t border-cream-200 space-y-1.5 text-xs text-gray-500">
+              <p className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-brand-600" /> +94 77 123 4567</p>
+              <p className="flex items-center gap-2">✉️ hello@araliyaceylon.com</p>
             </div>
           </div>
         )}

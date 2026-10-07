@@ -1,29 +1,30 @@
 import Link from 'next/link';
-import { Compass, ArrowLeft } from 'lucide-react';
+import { MapPin, ArrowLeft } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="min-h-[75vh] flex items-center justify-center px-4 py-16 bg-sand-50">
-      <div className="max-w-md w-full text-center space-y-6 bg-white p-8 sm:p-10 rounded-3xl shadow-xl border border-sand-200">
-        <div className="w-16 h-16 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center mx-auto shadow-inner">
-          <Compass className="w-8 h-8 text-brand-700 animate-spin-slow" />
+    <div className="min-h-[75vh] flex items-center justify-center px-4 py-20 bg-sand-100">
+      <div className="max-w-sm w-full text-center space-y-6 bg-white p-8 rounded border border-sand-300 shadow-card">
+
+        <div className="w-14 h-14 rounded bg-brand-50 border border-brand-100 flex items-center justify-center mx-auto">
+          <MapPin className="w-7 h-7 text-brand-600" />
         </div>
+
         <div className="space-y-2">
-          <h1 className="font-display text-4xl font-extrabold text-gray-900">404</h1>
-          <h2 className="font-display text-xl font-bold text-gray-800">Page Not Found</h2>
-          <p className="text-sm text-gray-500">
-            The tropical path you are looking for seems to have drifted away. Let's get you back on track!
+          <p className="text-5xl font-display font-bold text-brand-700">404</p>
+          <h1 className="font-display text-xl font-bold text-gray-800">Page Not Found</h1>
+          <p className="text-sm text-gray-500 leading-relaxed">
+            This path seems to end in the jungle. Let&apos;s get you back to the main road.
           </p>
         </div>
-        <div>
-          <Link
-            href="/"
-            className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-2xl bg-brand-700 hover:bg-brand-800 text-white font-bold text-sm shadow-md transition-all"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Return to Home</span>
-          </Link>
-        </div>
+
+        <Link
+          href="/"
+          className="btn-primary mx-auto"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Home
+        </Link>
       </div>
     </div>
   );

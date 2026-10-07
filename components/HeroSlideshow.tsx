@@ -2,176 +2,207 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Pause, Play, MapPin, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 
 export interface SlideItem {
   src: string;
   alt: string;
-  title?: string;
   location?: string;
 }
 
 interface HeroSlideshowProps {
   slides: SlideItem[];
-  interval?: number; // duration in ms
+  interval?: number;
   heightClass?: string;
   children?: React.ReactNode;
-  overlayGradient?: string;
 }
 
 export default function HeroSlideshow({
   slides,
-  interval = 5000,
-  heightClass = "min-h-[85vh] lg:min-h-[90vh]",
+  interval = 5500,
+  heightClass = 'min-h-[92vh]',
   children,
-  overlayGradient = "from-emerald-950/80 via-black/40 to-emerald-950/60"
 }: HeroSlideshowProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [direction, setDirection] = useState(1); // 1 for next, -1 for prev
+  const [currentIndex, setCurrentIndex]   = useState(0);
+  const [prevIndex,    setPrevIndex]      = useState(-1);
+  const [isAnimating, setIsAnimating]     = useState(false);
+  const [touchStart,  setTouchStart]      = useState<number | null>(null);
+
+  const goTo = useCallback(
+    (index: number) => {
+      if (isAnimating || index === currentIndex) return;
+      setPrevIndex(currentIndex);
+      setIsAnimating(true);
+      setCurrentIndex(index);
+      setTimeout(() => { setPrevIndex(-1); setIsAnimating(false); }, 900);
+    },
+    [isAnimating, currentIndex]
+  );
 
   const handleNext = useCallback(() => {
-    setDirection(1);
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-  }, [slides.length]);
+    goTo((currentIndex + 1) % slides.length);
+  }, [currentIndex, slides.length, goTo]);
 
   const handlePrev = useCallback(() => {
-    setDirection(-1);
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + slides.length) % slides.length);
-  }, [slides.length]);
-
-  const goToSlide = (index: number) => {
-    setDirection(index > currentIndex ? 1 : -1);
-    setCurrentIndex(index);
-  };
+    goTo((currentIndex - 1 + slides.length) % slides.length);
+  }, [currentIndex, slides.length, goTo]);
 
   useEffect(() => {
-    if (!isPlaying || slides.length <= 1) return;
-    const timer = setInterval(() => {
-      handleNext();
-    }, interval);
-
+    if (slides.length <= 1) return;
+    const timer = setInterval(handleNext, interval);
     return () => clearInterval(timer);
-  }, [isPlaying, interval, handleNext, slides.length]);
+  }, [handleNext, interval, slides.length]);
 
   const currentSlide = slides[currentIndex] || slides[0];
 
   return (
-    <section className={`relative ${heightClass} flex items-center justify-center overflow-hidden bg-brand-950 select-none`}>
-      {/* BACKGROUND SLIDESHOW WITH FRAMER MOTION ANIMATION */}
-      <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="popLayout" custom={direction}>
-          <motion.div
-            key={currentIndex}
-            custom={direction}
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1, 
-              transition: { 
-                opacity: { duration: 1.2, ease: "easeInOut" },
-                scale: { duration: interval / 1000, ease: "linear" }
-              } 
+    <section
+      className={`relative ${heightClass} flex items-center overflow-hidden bg-brand-950 select-none`}
+      aria-label="Hero image slideshow"
+      onTouchStart={(e) => setTouchStart(e.touches[0].clientX)}
+      onTouchEnd={(e) => {
+        if (touchStart === null) return;
+        const diff = touchStart - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) { diff > 0 ? handleNext() : handlePrev(); }
+        setTouchStart(null);
+      }}
+    >
+      {/* ── Background Images ──────────────────────────────────────── */}
+      <div className="absolute inset-0">
+        {slides.map((slide, idx) => (
+          <div
+            key={idx}
+            className="absolute inset-0"
+            style={{
+              opacity:    idx === currentIndex ? 1 : idx === prevIndex ? 0 : 0,
+              transition: 'opacity 0.9s ease-in-out',
+              zIndex:     idx === currentIndex ? 2 : idx === prevIndex ? 1 : 0,
             }}
-            exit={{ opacity: 0, transition: { duration: 1.0, ease: "easeInOut" } }}
-            className="absolute inset-0 w-full h-full"
+            aria-hidden={idx !== currentIndex}
           >
             <Image
-              src={currentSlide.src}
-              alt={currentSlide.alt || "Sri Lanka Hero"}
+              src={slide.src}
+              alt={slide.alt}
               fill
-              priority={currentIndex === 0}
-              quality={90}
+              priority={idx === 0}
+              quality={95}
               className="object-cover object-center"
+              style={{
+                transform: idx === currentIndex ? 'scale(1)' : 'scale(1.04)',
+                transition: 'transform 7s ease-out',
+              }}
             />
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        ))}
 
-        {/* MODERN CREATIVE GREEN OVERLAY GRADIENTS */}
-        <div className={`absolute inset-0 bg-gradient-to-t ${overlayGradient} z-10`} />
-        <div className="absolute inset-0 bg-emerald-950/20 mix-blend-multiply z-10" />
-        
-        {/* Subtle Decorative Ambient Glows */}
-        <div className="absolute top-10 left-10 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none z-10 animate-pulse-glow" />
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-teal-400/15 rounded-full blur-3xl pointer-events-none z-10 animate-pulse-glow" />
+        {/* Multi-layer overlay — directional dark on left, fade bottom */}
+        <div
+          className="absolute inset-0 z-10"
+          style={{
+            background: `linear-gradient(
+              105deg,
+              rgba(8,44,28,0.86) 0%,
+              rgba(8,44,28,0.55) 55%,
+              rgba(8,44,28,0.12) 100%
+            )`,
+          }}
+        />
+        <div
+          className="absolute inset-0 z-10"
+          style={{
+            background: 'linear-gradient(to top, rgba(8,44,28,0.60) 0%, transparent 50%)',
+          }}
+        />
       </div>
 
-      {/* FOREGROUND CONTENT OVERLAY */}
+      {/* ── Content ────────────────────────────────────────────────── */}
       <div className="relative z-20 w-full">
         {children}
       </div>
 
-      {/* SLIDE LOCATION BADGE (TOP RIGHT / BOTTOM RIGHT ACCORDING TO SCREEN) */}
+      {/* ── Location Badge ─────────────────────────────────────────── */}
       {currentSlide.location && (
-        <div className="absolute top-24 right-4 sm:right-8 z-30 hidden sm:flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-emerald-400/30 text-white text-xs font-semibold shadow-lg">
-          <MapPin className="w-3.5 h-3.5 text-emerald-400 animate-bounce" />
-          <span className="text-emerald-100">{currentSlide.location}</span>
+        <div
+          className="absolute top-5 right-5 z-30 hidden sm:flex items-center gap-2 px-3.5 py-1.5 text-white text-xs font-medium"
+          style={{
+            background: 'rgba(0,0,0,0.42)',
+            backdropFilter: 'blur(12px)',
+            borderRadius: '999px',
+            border: '1px solid rgba(255,255,255,0.2)',
+          }}
+          aria-live="polite"
+        >
+          <MapPin className="w-3 h-3 text-gold-300" />
+          <span style={{ fontFamily: 'Outfit, sans-serif' }}>{currentSlide.location}</span>
         </div>
       )}
 
-      {/* SLIDESHOW NAVIGATION CONTROLS & PROGRESS INDICATORS */}
+      {/* ── Arrow Controls ─────────────────────────────────────────── */}
       {slides.length > 1 && (
-        <div className="absolute bottom-6 inset-x-0 z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 pointer-events-auto">
-          
-          {/* Active Location indicator badge on mobile */}
-          {currentSlide.location && (
-            <div className="sm:hidden flex items-center space-x-2 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-emerald-400/30 text-white text-xs font-medium">
-              <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-200">{currentSlide.location}</span>
-            </div>
-          )}
+        <>
+          <button
+            onClick={handlePrev}
+            aria-label="Previous slide"
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 flex items-center justify-center text-white transition-all duration-200 hover:scale-110"
+            style={{
+              background: 'rgba(0,0,0,0.35)',
+              backdropFilter: 'blur(8px)',
+              borderRadius: '50%',
+              border: '1px solid rgba(255,255,255,0.2)',
+            }}
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={handleNext}
+            aria-label="Next slide"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 flex items-center justify-center text-white transition-all duration-200 hover:scale-110"
+            style={{
+              background: 'rgba(0,0,0,0.35)',
+              backdropFilter: 'blur(8px)',
+              borderRadius: '50%',
+              border: '1px solid rgba(255,255,255,0.2)',
+            }}
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
 
-          {/* Dots Indicator */}
-          <div className="flex items-center space-x-2 bg-black/40 backdrop-blur-xl px-4 py-2 rounded-full border border-emerald-500/30 shadow-xl">
-            {slides.map((slide, idx) => {
-              const isActive = idx === currentIndex;
-              return (
-                <button
-                  key={idx}
-                  onClick={() => goToSlide(idx)}
-                  aria-label={`Go to slide ${idx + 1}`}
-                  className={`group relative h-2.5 rounded-full transition-all duration-300 focus:outline-none ${
-                    isActive ? 'w-8 bg-gradient-to-r from-emerald-400 to-teal-300 shadow-lg shadow-emerald-500/50' : 'w-2.5 bg-white/40 hover:bg-white/70'
-                  }`}
-                >
-                  <span className="sr-only">Slide {idx + 1}: {slide.alt}</span>
-                </button>
-              );
-            })}
+          {/* Slide indicators */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2">
+            {slides.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => goTo(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+                className="transition-all duration-400"
+                style={{
+                  height: '3px',
+                  width: idx === currentIndex ? '32px' : '10px',
+                  background: idx === currentIndex
+                    ? 'rgba(212,168,83,0.95)'
+                    : 'rgba(255,255,255,0.38)',
+                  borderRadius: '999px',
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+              />
+            ))}
           </div>
-
-          {/* Arrow Buttons & Play/Pause */}
-          <div className="flex items-center space-x-2 bg-black/40 backdrop-blur-xl p-1.5 rounded-full border border-emerald-500/30 shadow-xl">
-            <button
-              onClick={handlePrev}
-              aria-label="Previous slide"
-              className="p-2 rounded-full text-white/80 hover:text-white hover:bg-emerald-600/60 transition duration-200 focus:outline-none"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={() => setIsPlaying(!isPlaying)}
-              aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
-              className="p-2 rounded-full text-emerald-300 hover:text-white hover:bg-emerald-600/60 transition duration-200 focus:outline-none"
-            >
-              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            </button>
-
-            <button
-              onClick={handleNext}
-              aria-label="Next slide"
-              className="p-2 rounded-full text-white/80 hover:text-white hover:bg-emerald-600/60 transition duration-200 focus:outline-none"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+        </>
       )}
 
-      {/* TOP DECORATIVE CREATIVE GREEN ACCENT LINE */}
-      <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 z-30" />
+      {/* ── Progress bar ───────────────────────────────────────────── */}
+      <div className="absolute bottom-0 left-0 z-30 h-[2px] bg-gold-400/70"
+        style={{
+          animation: `heroProgress ${interval}ms linear infinite`,
+        }}
+      />
+      <style jsx>{`
+        @keyframes heroProgress {
+          from { width: 0%; }
+          to   { width: 100%; }
+        }
+      `}</style>
     </section>
   );
 }

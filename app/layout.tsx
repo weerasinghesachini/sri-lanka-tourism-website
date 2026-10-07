@@ -1,44 +1,40 @@
 import type { Metadata } from 'next';
-import { Inter, Outfit } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-
-// Google Fonts direct integration (Better Performance)
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-});
-
-const outfit = Outfit({
-  subsets: ['latin'],
-  variable: '--font-outfit',
-  display: 'swap',
-});
+import { LanguageProvider } from '@/context/LanguageContext';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://lankavista.com'),
+  metadataBase: new URL('https://araliyaceylon.com'),
   title: {
-    default: 'LankaVista | Discover the Wonder of Sri Lanka Tourism & Travel',
-    template: '%s | LankaVista',
+    default: 'Araliya Ceylon — Discover the Soul of Sri Lanka',
+    template: '%s | Araliya Ceylon',
   },
   description:
-    'Explore golden beaches, ancient kingdoms, mist-shrouded tea mountains, and unforgettable wildlife safaris in Sri Lanka.',
+    'Araliya Ceylon is a Sri Lankan tourism company crafting authentic travel experiences — from misty tea-covered mountains and ancient rock fortresses to golden beaches and wild national parks.',
   keywords: [
+    'Araliya Ceylon',
+    'Sri Lanka travel agency',
     'Sri Lanka tourism',
     'Sigiriya tours',
-    'Ella train travel',
+    'Ella Nine Arch Bridge',
     'Mirissa whale watching',
-    'Ceylon travel agency',
-    'LankaVista',
+    'Yala leopard safari',
+    'Galle Fort travel',
+    'Ceylon tour operator',
+    'Sri Lanka honeymoon',
+    'Sri Lanka wildlife safari',
+    'tea plantation tours',
   ],
+  icons: {
+    icon: '/favicon.svg',
+  },
   openGraph: {
-    title: 'LankaVista - Explore Sri Lanka',
+    title: 'Araliya Ceylon — Discover the Soul of Sri Lanka',
     description:
-      'Custom travel packages, interactive trip planning, and guided tours in Sri Lanka.',
-    url: 'https://lankavista.com',
-    siteName: 'LankaVista',
+      'Personalised itineraries, local driver-guides, and boutique stays across Sri Lanka. From misty highlands to golden beaches.',
+    url: 'https://araliyaceylon.com',
+    siteName: 'Araliya Ceylon',
     locale: 'en_US',
     type: 'website',
   },
@@ -50,11 +46,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`scroll-smooth ${inter.variable} ${outfit.variable}`}>
-      <body className="bg-sand-50 text-gray-900 flex flex-col min-h-screen antialiased selection:bg-emerald-500 selection:text-white">
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+    <html lang="en" className="scroll-smooth">
+      <body className="bg-cream-100 text-gray-900 flex flex-col min-h-screen antialiased">
+        <LanguageProvider>
+          <Navbar />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );

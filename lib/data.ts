@@ -33,115 +33,77 @@ export interface PackageItem {
   rating: number;
   image: string;
   destinations: string[];
+  summary: string;
 }
+
+export const BRAND = {
+  name: 'ARALIYA CEYLON',
+  tagline: 'Travel Sri Lanka with a local touch.',
+  phone: '+94 77 123 4567',
+  landline: '+94 11 234 5678',
+  email: 'hello@araliyaceylon.com',
+  address: '42 Galle Road, Colombo 03, Sri Lanka',
+  rating: '4.9',
+  reviewsCount: '520+',
+};
 
 export const DESTINATIONS: Destination[] = [
   {
-    id: 'sigiriya',
-    name: 'Sigiriya Rock Fortress',
-    province: 'Central Province',
-    category: 'Heritage',
-    rating: 4.9,
-    reviewsCount: 320,
-    bestTime: 'Jan - Apr',
-    duration: '1-2 Days',
-    travelStyle: 'Culture & History',
-    averageBudget: '$50 - $100',
-    image: '/images/sigiriya.jpeg',
-    gallery: [
-      '/images/sigiriya rock.jpeg',
-      '/images/sigiriya1.jpeg',
-      '/images/sigiriya rock1.jpeg'
-    ],
-    description: 'The ancient rock fortress of Sigiriya (Lion Rock) is a 5th-century UNESCO World Heritage Site in Central Sri Lanka, featuring ancient frescoes, water gardens, and panoramic views.',
-    topThingsToDo: [
-      'Climb the 1,200 steps to the summit lion palace',
-      'Examine the world-famous Sigiriya Maiden Frescoes',
-      'Marvel at the ancient Mirror Wall inscriptions',
-      'Watch golden sunset over Pidurangala Rock'
-    ],
-    pricePerPerson: 85,
-    featured: true
-  },
-  {
     id: 'ella',
-    name: 'Ella & Nine Arch Bridge',
-    province: 'Central Province',
+    name: 'Ella & Hill Country',
+    province: 'Uva Province',
     category: 'Mountain',
     rating: 4.9,
-    reviewsCount: 450,
+    reviewsCount: 480,
     bestTime: 'Dec - Apr',
     duration: '2-3 Days',
-    travelStyle: 'Nature & Trekking',
-    averageBudget: '$40 - $90',
-    image: '/images/ella nine arch.jpeg',
+    travelStyle: 'Highland Trails & Scenic Rail',
+    averageBudget: '$45 - $90',
+    image: '/images/hero_ella_hd.png',
     gallery: [
-      '/images/nine arch.jpeg',
+      '/images/hero_ella_hd.png',
+      '/images/nine arch 2.jpeg',
+      '/images/nine arch 3.jpeg',
       '/images/ella1.jpeg',
-      '/images/nine arch 2.jpeg'
+      '/images/ella2.jpeg',
     ],
-    description: 'Nestled deep in the misty hill country of Sri Lanka, Ella offers world-famous blue train rides, Nine Arch Bridge photography, tea plantations, and scenic peak hikes.',
+    description: 'Set amidst tea plantations and pine-clad hills, Ella is a quiet mountain town known for the blue train journey, Nine Arch Bridge, and sunrise walks up Little Adam\'s Peak.',
     topThingsToDo: [
-      'Photograph the iconic blue train on Nine Arch Bridge',
-      'Hike up Little Adam\'s Peak for sunrise views',
-      'Trek Ella Rock and visit Ravana Waterfall',
-      'Sample authentic Ceylon black tea at local factories'
+      'Take the morning train across the Nine Arch Bridge',
+      'Walk through tea gardens to Little Adam\'s Peak for sunrise',
+      'Trek Ella Rock for views over the Southern Plains',
+      'Sample freshly brewed Ceylon tea at a highland factory'
     ],
     pricePerPerson: 75,
     featured: true
   },
   {
-    id: 'mirissa',
-    name: 'Mirissa & Coconut Tree Hill',
-    province: 'Southern Province',
-    category: 'Beach',
-    rating: 4.8,
-    reviewsCount: 290,
-    bestTime: 'Nov - Apr',
-    duration: '2-3 Days',
-    travelStyle: 'Coastal & Wildlife',
-    averageBudget: '$45 - $95',
-    image: '/images/mirissa cocount hill.jpeg',
-    gallery: [
-      '/images/mirissa.jpeg',
-      '/images/mirissa1.jpeg',
-      '/images/mirissa coconut hill1.jpeg'
-    ],
-    description: 'Tropical southern coastal paradise famous for blue whale watching expeditions, Coconut Tree Hill palm headland, and turquoise beach bays.',
-    topThingsToDo: [
-      'Embark on a sunrise Blue Whale & Dolphin boat safari',
-      'Take photos at the famous Coconut Tree Hill',
-      'Relax on Mirissa secret beach and sample fresh seafood',
-      'Surfing lessons at Weligama bay nearby'
-    ],
-    pricePerPerson: 65,
-    featured: true
-  },
-  {
-    id: 'kandy',
-    name: 'Kandy Temple of Tooth',
+    id: 'sigiriya',
+    name: 'Sigiriya Ancient Citadel',
     province: 'Central Province',
-    category: 'Cultural',
-    rating: 4.8,
-    reviewsCount: 380,
-    bestTime: 'Dec - Apr',
-    duration: '2 Days',
-    travelStyle: 'Heritage & Pilgrimage',
-    averageBudget: '$50 - $110',
-    image: '/images/kandy.jpeg',
+    category: 'Heritage',
+    rating: 4.9,
+    reviewsCount: 390,
+    bestTime: 'Jan - Apr',
+    duration: '1-2 Days',
+    travelStyle: 'Ancient Architecture & History',
+    averageBudget: '$50 - $100',
+    image: '/images/hero_sigiriya_hd.png',
     gallery: [
-      '/images/kandy1.jpeg',
-      '/images/kandy2.jpeg',
-      '/images/kandy3.jpeg'
+      '/images/hero_sigiriya_hd.png',
+      '/images/sigiriya1.jpeg',
+      '/images/sigiriya2.jpeg',
+      '/images/sigiriya rock.jpeg',
+      '/images/sigiriya rock1.jpeg',
     ],
-    description: 'The sacred hill capital of Sri Lanka, home to Sri Dalada Maligawa (Temple of the Sacred Tooth Relic), traditional Kandyan dancers, and Peradeniya Botanical Gardens.',
+    description: 'A 5th-century rock fortress rising 200 metres above the central plains, featuring ancient water gardens, hand-painted frescoes, and sweeping forest views.',
     topThingsToDo: [
-      'Pay respects at Temple of the Sacred Tooth Relic',
-      'Stroll around Peradeniya Royal Botanical Gardens',
-      'Watch traditional Kandyan drum & fire dancing',
-      'Walk around Kandy Lake scenic loop'
+      'Climb the lion stairways to the rock summit palace',
+      'Examine the ancient painted frescoes preserved on the cliffside',
+      'Walk through the oldest landscaped water gardens in Asia',
+      'Watch sunset over Sigiriya from neighboring Pidurangala Rock'
     ],
-    pricePerPerson: 70,
+    pricePerPerson: 85,
     featured: true
   },
   {
@@ -150,194 +112,362 @@ export const DESTINATIONS: Destination[] = [
     province: 'Southern Province',
     category: 'Heritage',
     rating: 4.9,
-    reviewsCount: 410,
+    reviewsCount: 420,
     bestTime: 'Dec - Apr',
     duration: '1-2 Days',
-    travelStyle: 'Colonial Architecture',
+    travelStyle: 'Colonial Architecture & Ocean Walk',
     averageBudget: '$60 - $120',
-    image: '/images/galle light house.jpeg',
+    image: '/images/hero_galle_hd.png',
     gallery: [
-      '/images/galle.jpeg',
+      '/images/hero_galle_hd.png',
+      '/images/galle3.jpeg',
+      '/images/galle light house.jpeg',
+      '/images/galle light house2.jpeg',
       '/images/galle1.jpeg',
-      '/images/galle light house1.jpeg'
     ],
-    description: 'A 16th-century Portuguese and Dutch colonial fort city on Sri Lanka\'s southern tip with cobblestone alleys, lighthouse views, and vibrant artisan boutiques.',
+    description: 'A living 17th-century seaside fortress with narrow stone streets, Dutch-colonial houses, artisan craft shops, and sunset views from the rampart walls.',
     topThingsToDo: [
-      'Walk along Galle Fort rampart walls at sunset',
-      'Photograph Galle Dutch Lighthouse & Flag Rock',
-      'Shop at heritage jewelry stores and gelato cafes',
-      'Visit Maritime Museum & Dutch Reformed Church'
+      'Walk the perimeter ramparts at sunset',
+      'Photograph the white Dutch lighthouse and flag rock',
+      'Explore quiet cobblestone lanes and craft workshops',
+      'Visit local spice gardens and heritage tea cafes nearby'
     ],
-    pricePerPerson: 80
+    pricePerPerson: 80,
+    featured: true
+  },
+  {
+    id: 'mirissa',
+    name: 'Mirissa & Coconut Hill',
+    province: 'Southern Province',
+    category: 'Beach',
+    rating: 4.8,
+    reviewsCount: 310,
+    bestTime: 'Nov - Apr',
+    duration: '2-3 Days',
+    travelStyle: 'Coastal Bays & Ocean Safaris',
+    averageBudget: '$45 - $95',
+    image: '/images/hero_mirissa_hd.png',
+    gallery: [
+      '/images/hero_mirissa_hd.png',
+      '/images/mirissa4.jpeg',
+      '/images/mirissa2.jpeg',
+      '/images/mirissa3.jpeg',
+      '/images/mirissa cocount hill.jpeg',
+    ],
+    description: 'A relaxed crescent-shaped bay on the southern coast, ideal for watching blue whales off the continental shelf, quiet morning swims, and fresh seafood by the water.',
+    topThingsToDo: [
+      'Join an early morning boat trip to spot blue whales in deep waters',
+      'Walk up to Coconut Tree Hill headland at golden hour',
+      'Swim at Secret Beach and watch fishermen along the reef',
+      'Take surf lessons in the gentle waves of Weligama Bay'
+    ],
+    pricePerPerson: 65,
+    featured: true
+  },
+  {
+    id: 'kandy',
+    name: 'Kandy Sacred City',
+    province: 'Central Province',
+    category: 'Cultural',
+    rating: 4.8,
+    reviewsCount: 400,
+    bestTime: 'Dec - Apr',
+    duration: '2 Days',
+    travelStyle: 'Temple Heritage & Gardens',
+    averageBudget: '$50 - $110',
+    image: '/images/kandy_hd.png',
+    gallery: [
+      '/images/kandy_hd.png',
+      '/images/kandy1.jpeg',
+      '/images/kandy4.jpeg',
+      '/images/kandy7.jpeg',
+      '/images/kandy3.jpeg',
+    ],
+    description: 'Sri Lanka\'s cultural capital nestled around a quiet lake, famous for the Temple of the Sacred Tooth Relic, Kandyan drumming traditions, and royal botanical gardens.',
+    topThingsToDo: [
+      'Attend evening prayer ceremonies at the Temple of the Tooth',
+      'Stroll through the shaded avenues of Peradeniya Botanical Gardens',
+      'Walk around Kandy Lake as the evening fog rolls down the hills',
+      'Experience traditional Kandyan drum and dance performances'
+    ],
+    pricePerPerson: 70,
+    featured: true
   },
   {
     id: 'yala',
-    name: 'Yala National Park Safari',
+    name: 'Yala National Park',
     province: 'Southern Province',
     category: 'Wildlife',
     rating: 4.9,
-    reviewsCount: 310,
+    reviewsCount: 350,
     bestTime: 'Feb - Jul',
     duration: '1-2 Days',
-    travelStyle: 'Leopard & Wildlife Safari',
+    travelStyle: 'Wildlife Jeep Safari',
     averageBudget: '$80 - $160',
-    image: '/images/yala safari.jpeg',
+    image: '/images/hero_yala_hd.png',
     gallery: [
-      '/images/yala.jpeg',
+      '/images/hero_yala_hd.png',
+      '/images/yalasfari1.jpeg',
       '/images/yala1.jpeg',
-      '/images/yala safari2.jpeg'
+      '/images/yala3.jpeg',
+      '/images/yala5.jpeg',
     ],
-    description: 'Sri Lanka\'s most celebrated national park, boasting the highest density of wild leopards in the world alongside Asian elephants, sloth bears, and crocodiles.',
+    description: 'A coastal wilderness park of dry thorn scrub, lagoons, and rocky outcrops, home to wild Asian elephants, sloth bears, sea turtles, and wild leopards.',
     topThingsToDo: [
-      'Early morning 4x4 open-top jeep safari',
-      'Spot wild Sri Lankan Leopards & Elephants',
-      'Bird watching at Palatupana lagoons',
-      'Luxury glamping under southern stars'
+      'Join a morning open-jeep safari through Block 1',
+      'Spot wild elephants drinking at coastal lagoons',
+      'Look out for leopards resting on granite boulders',
+      'Watch migratory water birds around Palatupana saline tanks'
     ],
-    pricePerPerson: 110
+    pricePerPerson: 110,
+    featured: true
   },
   {
     id: 'nuwara-eliya',
-    name: 'Nuwara Eliya (Little England)',
+    name: 'Nuwara Eliya Highlands',
     province: 'Central Province',
     category: 'Mountain',
     rating: 4.7,
-    reviewsCount: 270,
+    reviewsCount: 290,
     bestTime: 'Mar - May',
     duration: '2 Days',
-    travelStyle: 'Highland Charm & Tea',
+    travelStyle: 'Highland Cool Air & Tea Estate Walks',
     averageBudget: '$55 - $115',
     image: '/images/nuwaraeliya.jpeg',
     gallery: [
+      '/images/nuwaraeliya.jpeg',
       '/images/nuwaraeliya1.jpeg',
       '/images/tea.jpeg',
-      '/images/mistymountant.jpeg'
+      '/images/tea1.jpeg',
+      '/images/tea2.jpeg',
     ],
-    description: 'Known as "Little England", famous for cool climate, colonial Tudor mansions, Gregory Lake boat rides, strawberry farms, and tea plantations.',
+    description: 'Situated at 1,868 metres elevation, Nuwara Eliya is Sri Lanka\'s highest town, known for cool highland weather, manicured gardens, tea factories, and lake walks.',
     topThingsToDo: [
-      'Tour Pedro Tea Estate & taste fresh Ceylon Tea',
-      'Swan pedal boat ride on Gregory Lake',
-      'Hike Horton Plains to World\'s End drop-off',
-      'Stroll through Victoria Park flowers'
+      'Take a guided walk through Pedro Tea Estate and sample single-origin teas',
+      'Rent a wooden rowboat on quiet Lake Gregory',
+      'Hike across Horton Plains to World\'s End cliff drop-off',
+      'Walk through Victoria Park when highland flowers bloom'
     ],
     pricePerPerson: 75
   },
   {
-    id: 'arugam-bay',
-    name: 'Arugam Bay Surf Haven',
+    id: 'trincomalee',
+    name: 'Trincomalee & Nilaveli',
     province: 'Eastern Province',
     category: 'Beach',
     rating: 4.8,
-    reviewsCount: 220,
+    reviewsCount: 210,
     bestTime: 'May - Sep',
-    duration: '3-5 Days',
-    travelStyle: 'Surfing & Beach Vibe',
-    averageBudget: '$40 - $85',
-    image: '/images/mirisa5.jpeg',
+    duration: '2-3 Days',
+    travelStyle: 'Quiet Eastern Beaches & Marine Life',
+    averageBudget: '$45 - $90',
+    image: '/images/srilanka1.jpeg',
     gallery: [
-      '/images/mirissa6.jpeg',
-      '/images/mirissa7.jpeg'
+      '/images/srilanka1.jpeg',
+      '/images/srilanka2.jpeg',
+      '/images/view3.jpeg',
+      '/images/view1.jpeg',
     ],
-    description: 'World-class surfing destination on Sri Lanka\'s east coast featuring famous point breaks, lagoon safaris, and bohemian beach cafes.',
+    description: 'Famous for quiet white-sand beaches, Pigeon Island coral reef snorkeling, and the cliffside Koneswaram Hindu Temple overlooking Swami Rock harbor.',
     topThingsToDo: [
-      'Surf Main Point, Peanut Farm, and Elephant Rock',
-      'Kottukal Lagoon boat safari for crocodiles',
-      'Sunset yoga and beachfront dinners',
-      'Visit Elephant Rock for sunset panorama'
+      'Snorkel with reef sharks and sea turtles at Pigeon Island',
+      'Visit Koneswaram Temple perched on Swami Rock cliff',
+      'Relax on quiet Nilaveli Beach far from busy resort towns',
+      'Take a boat out to watch blue whales off the east coast'
+    ],
+    pricePerPerson: 70
+  },
+  {
+    id: 'anuradhapura',
+    name: 'Anuradhapura Sacred Kingdom',
+    province: 'North Central Province',
+    category: 'Heritage',
+    rating: 4.8,
+    reviewsCount: 240,
+    bestTime: 'May - Sep',
+    duration: '1-2 Days',
+    travelStyle: 'Ancient Capitals & Sacred Stupas',
+    averageBudget: '$45 - $85',
+    image: '/images/anuradapura2.jpeg',
+    gallery: [
+      '/images/anuradapura2.jpeg',
+      '/images/anuradapura1.jpeg',
+      '/images/anuradapura.jpeg',
+      '/images/unesco heritage.jpeg',
+    ],
+    description: 'Sri Lanka\'s first ancient capital, featuring monumental white brick stupas, ancient stone pools, and Jaya Sri Maha Bodhi — one of the oldest human-planted trees in the world.',
+    topThingsToDo: [
+      'Cycle through the ancient ruins and sacred stupa complexes',
+      'Pay respects at the ancient Jaya Sri Maha Bodhi tree',
+      'Marvel at Ruwanwelisaya and Jetavanaramaya stupas',
+      'Explore Kuttam Pokuna ancient twin ponds'
+    ],
+    pricePerPerson: 65
+  },
+  {
+    id: 'jaffna',
+    name: 'Jaffna & Northern Peninsula',
+    province: 'Northern Province',
+    category: 'Cultural',
+    rating: 4.7,
+    reviewsCount: 180,
+    bestTime: 'May - Sep',
+    duration: '2-3 Days',
+    travelStyle: 'Tamil Culture, Islands & Local Flavors',
+    averageBudget: '$40 - $80',
+    image: '/images/srilanka4.jpeg',
+    gallery: [
+      '/images/srilanka4.jpeg',
+      '/images/srilanka3.jpeg',
+      '/images/view7.jpeg',
+      '/images/view4.jpeg',
+    ],
+    description: 'A vibrant northern city with a distinct Tamil cultural identity, colorful Nallur Kandaswamy Kovil, Dutch Fort, quiet island causeways, and rich local seafood curries.',
+    topThingsToDo: [
+      'Visit the golden towers of Nallur Kandaswamy Kovil',
+      'Take a local ferry across to Nainativu Island temples',
+      'Walk along the historic Jaffna Dutch Fort walls',
+      'Try authentic Jaffna crab curry at a family eating spot'
     ],
     pricePerPerson: 60
   }
 ];
 
 export const CATEGORIES = [
-  { id: 'beach', name: 'Beach Escapes', count: '12 Beaches', icon: 'Sun', image: '/images/mirissa8.jpeg' },
-  { id: 'wildlife', name: 'Wildlife Safaris', count: '8 Parks', icon: 'Compass', image: '/images/yalasafari1.jpeg' },
-  { id: 'mountain', name: 'Misty Mountains', count: '15 Trails', icon: 'Mountain', image: '/images/mistymountant1.jpeg' },
-  { id: 'cultural', name: 'UNESCO Heritage', count: '10 Kingdoms', icon: 'Landmark', image: '/images/unesco heritage.jpeg' },
-  { id: 'food', name: 'Ceylon Food Tours', count: '20+ Tours', icon: 'Utensils', image: '/images/food.jpeg' },
-  { id: 'romantic', name: 'Honeymoon Resorts', count: '14 Vistas', icon: 'Heart', image: '/images/honeymoon resort.jpeg' },
+  {
+    id: 'beach',
+    name: 'Beach Holidays',
+    count: '10 Coastlines',
+    icon: 'Sun',
+    image: '/images/mirissa3.jpeg',
+    desc: 'Calm ocean bays, palm-lined sands, and quiet coastal retreats.'
+  },
+  {
+    id: 'mountain',
+    name: 'Mountain & Tea Country',
+    count: '12 Highlands',
+    icon: 'Mountain',
+    image: '/images/tea3.jpeg',
+    desc: 'Tea plantation walks, cool air, and scenic hill country rail journeys.'
+  },
+  {
+    id: 'wildlife',
+    name: 'Wildlife Safaris',
+    count: '8 Sanctuaries',
+    icon: 'Compass',
+    image: '/images/yala1.jpeg',
+    desc: 'Open-jeep elephant and leopard tracking in protected national parks.'
+  },
+  {
+    id: 'heritage',
+    name: 'Cultural & Heritage',
+    count: '9 Ancient Sites',
+    icon: 'Landmark',
+    image: '/images/sigiriya rock1.jpeg',
+    desc: 'Ancient rock kingdoms, sacred temples, and historic fortress walks.'
+  },
+  {
+    id: 'food',
+    name: 'Sri Lankan Food Trails',
+    count: 'Local Spots',
+    icon: 'Utensils',
+    image: '/images/food1.jpeg',
+    desc: 'Home-cooked village meals, fresh seafood, and spice garden visits.'
+  },
+  {
+    id: 'nature',
+    name: 'Nature & Hikes',
+    count: '15 Forest Trails',
+    icon: 'Heart',
+    image: '/images/mistymountant.jpeg',
+    desc: 'Misty peak climbs, waterfall trails, and quiet nature sanctuaries.'
+  },
 ];
 
 export const POPULAR_PACKAGES: PackageItem[] = [
   {
-    id: 'ella-escape',
-    title: 'Magical Ella & Tea Country',
+    id: 'ella-tea-country',
+    title: 'Highland Rail & Tea Estates',
     days: 4,
     nights: 3,
-    price: 319,
+    price: 320,
     rating: 4.9,
-    image: '/images/ninearch1.jpeg',
-    destinations: ['Ella Train', 'Nine Arch Bridge', 'Little Adam\'s Peak']
+    image: '/images/hero_ella_hd.png',
+    destinations: ["Ella Train", "Nine Arch Bridge", "Little Adam's Peak"],
+    summary: 'Travel through the misty hill country by train, explore tea estates, and enjoy quiet mountain walks.'
   },
   {
-    id: 'southern-beach',
-    title: 'Southern Coast & Whales',
+    id: 'southern-coast-whales',
+    title: 'Southern Bays & Ocean Safaris',
     days: 6,
     nights: 5,
-    price: 489,
+    price: 490,
     rating: 4.8,
-    image: '/images/mirissa9.jpeg',
-    destinations: ['Mirissa Beach', 'Galle Fort', 'Coconut Hill', 'Unawatuna']
+    image: '/images/hero_mirissa_hd.png',
+    destinations: ['Mirissa Beach', 'Galle Fort', 'Coconut Tree Hill'],
+    summary: 'Relaxed days on southern beaches paired with sunrise whale watching and Galle Fort sunset walks.'
   },
   {
-    id: 'cultural-triangle',
-    title: 'Sigiriya & Cultural Triangle',
+    id: 'cultural-triangle-sigiriya',
+    title: 'Sigiriya & Sacred Kingdoms',
     days: 5,
     nights: 4,
-    price: 399,
+    price: 410,
     rating: 4.9,
-    image: '/images/anuradapura.jpeg',
-    destinations: ['Sigiriya Rock', 'Dambulla Caves', 'Kandy Temple']
+    image: '/images/hero_sigiriya_hd.png',
+    destinations: ['Sigiriya Rock', 'Dambulla Caves', 'Kandy Sacred Temple'],
+    summary: "Discover central Sri Lanka's ancient rock fortresses, cave temples, and sacred hill city heritage."
   },
   {
-    id: 'wild-sri-lanka',
-    title: 'Yala Safari & Wildlife Tour',
+    id: 'yala-wildlife-expedition',
+    title: 'Yala Wildlife & Elephant Trail',
     days: 5,
     nights: 4,
-    price: 439,
+    price: 450,
     rating: 4.9,
-    image: '/images/yala3.jpeg',
-    destinations: ['Yala Leopards', 'Udawalawe Elephants', 'Mirissa Safari']
+    image: '/images/hero_yala_hd.png',
+    destinations: ['Yala Leopards', 'Udawalawe Elephants', 'Mirissa Coast'],
+    summary: 'Guided open-top jeep safaris through wild national parks, combined with quiet coastal evenings.'
   }
 ];
 
 export const SERVICES: ServiceItem[] = [
-  { id: 's1', iconName: 'Compass', title: 'Curated Tour Packages', description: 'Handcrafted itineraries designed for seamless travel across Sri Lanka.' },
-  { id: 's2', iconName: 'Hotel', title: 'Luxury Hotel Bookings', description: 'Handpicked boutique villas, beach resorts, and mountain tea bungalows.' },
-  { id: 's3', iconName: 'Plane', title: 'Airport Transfers', description: 'Safe, air-conditioned private luxury transfers directly from BIA Colombo.' },
-  { id: 's4', iconName: 'MapPin', title: 'Local Guided Tours', description: 'Expert local English-speaking guides for ancient fortresses and safaris.' },
-  { id: 's5', iconName: 'Car', title: 'Chauffeur Vehicle Rental', description: 'Private luxury sedans, SUVs, and vans with dedicated professional drivers.' },
-  { id: 's6', iconName: 'Sliders', title: 'Custom Itinerary Design', description: 'Custom-tailored trips designed around your exact timeline and budget.' },
-  { id: 's7', iconName: 'Zap', title: 'Adventure & Surfing', description: 'Thrilling mountain trekking, white water rafting, and surfing packages.' },
-  { id: 's8', iconName: 'Headphones', title: '24/7 Travel Assistance', description: 'Dedicated travel manager available around the clock during your trip.' }
+  { id: 's1', iconName: 'Compass', title: 'Personalised Itineraries', description: 'Handcrafted travel plans tailored to your pace, travel dates, and preferred destinations.' },
+  { id: 's2', iconName: 'Hotel', title: 'Boutique Stay Bookings', description: 'Handpicked family-run guesthouses, tea bungalows, and quiet beach villas across the island.' },
+  { id: 's3', iconName: 'Plane', title: 'Airport Transfers', description: 'Reliable, air-conditioned private vehicle transfers directly from Colombo BIA International Airport.' },
+  { id: 's4', iconName: 'MapPin', title: 'Local Guided Tours', description: 'Knowledgeable Sri Lankan guides for ancient heritage sites, city walks, and nature trails.' },
+  { id: 's5', iconName: 'Car', title: 'Private Vehicle & Chauffeur', description: 'Dedicated air-conditioned cars and vans with friendly, professional local driver-guides.' },
+  { id: 's6', iconName: 'Sliders', title: 'Custom Travel Adjustments', description: 'Flexible trip customization before and during your travel so you never feel rushed.' },
+  { id: 's7', iconName: 'Zap', title: 'Trekking & Ocean Excursions', description: 'Whale watching safaris, train ticket reservations, hiking guides, and water activities.' },
+  { id: 's8', iconName: 'Headphones', title: 'On-Trip Assistance', description: 'Direct phone support with your personal travel coordinator throughout your stay in Sri Lanka.' }
 ];
 
 export const TEAM_MEMBERS = [
-  { name: 'Maya Perera', role: 'Founder & Travel Director', image: '/images/girl1.jpeg' },
-  { name: 'Daniel Fernando', role: 'Senior Tour Specialist', image: '/images/boy1.jpeg' },
-  { name: 'Naluni Silva', role: 'Head of Operations', image: '/images/girl2.jpeg' },
-  { name: 'Kasun Jayasinghe', role: 'Experience & Safari Guide', image: '/images/boy2.jpeg' },
+  { name: 'Sahan Perera', role: 'Founder & Local Travel Director', image: '/images/boy1.jpeg' },
+  { name: 'Dilini Fernando', role: 'Senior Tour Coordinator', image: '/images/girl1.jpeg' },
+  { name: 'Kavinda Silva', role: 'Highland & Safari Specialist', image: '/images/boy2.jpeg' },
+  { name: 'Nirosha Wickramasinghe', role: 'Guest Relations Manager', image: '/images/girl2.jpeg' },
 ];
 
 export const TESTIMONIALS = [
   {
-    quote: 'LankaVista made our Sri Lanka trip unforgettable! From Sigiriya rock to Ella train and Yala leopard safari, everything was perfectly organized.',
-    name: 'Sarah Johnson',
+    quote: 'We spent ten days exploring Ella and the southern coast with Araliya Ceylon. The morning train ride through tea estates and quiet sunset walks in Galle Fort were unforgettable.',
+    name: 'Sarah & Mark',
     country: 'United Kingdom',
     avatar: '/images/girl1.jpeg',
     rating: 5,
   },
   {
-    quote: 'The trip planner tool on the website let us customize every detail, and our private chauffeur driver was incredibly friendly and punctual!',
-    name: 'James Miller',
+    quote: 'Our driver Nirosh was wonderful — so patient and knowledgeable about local food stops. Araliya Ceylon arranged everything smoothly without making us feel like hurried tourists.',
+    name: 'David Miller',
     country: 'Australia',
     avatar: '/images/boy1.jpeg',
     rating: 5,
   },
   {
-    quote: 'Galle Fort and Mirissa whale watching exceeded all expectations. LankaVista handles luxury hotel bookings effortlessly.',
-    name: 'Priya Sharma',
-    country: 'India',
+    quote: 'Climbing Sigiriya early in the morning before the crowds arrived was a highlight. Araliya Ceylon made sure every stay was clean, comfortable, and truly Sri Lankan.',
+    name: 'Elena Rostova',
+    country: 'Germany',
     avatar: '/images/girl2.jpeg',
     rating: 5,
   }
@@ -346,32 +476,32 @@ export const TESTIMONIALS = [
 export const QUIZ_QUESTIONS = [
   {
     id: 1,
-    question: 'What type of adventure excites you most in Sri Lanka?',
+    question: 'What kind of Sri Lankan experience calls to you most?',
     options: [
-      { text: 'Relaxing on Mirissa & Arugam Bay golden beaches', value: 'beach', icon: 'Sun' },
-      { text: 'Trekking mist-covered mountains & Ella train rides', value: 'mountain', icon: 'Mountain' },
-      { text: 'Yala leopard safaris & wild elephant encounters', value: 'wildlife', icon: 'Compass' },
-      { text: 'Exploring Sigiriya Fortress & Kandy Tooth Temple', value: 'cultural', icon: 'Landmark' },
-      { text: 'Savoring authentic spicy Ceylon food & tea tasting', value: 'food', icon: 'Utensils' }
+      { text: 'Quiet golden beaches and listening to ocean waves', value: 'beach', icon: 'Sun' },
+      { text: 'Misty mountain walks and scenic tea country trains', value: 'mountain', icon: 'Mountain' },
+      { text: 'Wild elephant encounters and open jeep safaris', value: 'wildlife', icon: 'Compass' },
+      { text: 'Ancient rock kingdoms, temples, and historic ruins', value: 'cultural', icon: 'Landmark' },
+      { text: 'Savoring authentic home-cooked curries and tea estate walks', value: 'food', icon: 'Utensils' }
     ]
   },
   {
     id: 2,
-    question: 'What is your preferred travel pace?',
+    question: 'What pace feels right for your holiday?',
     options: [
-      { text: 'Fast-paced (See highlights across Sri Lanka in 5-7 days)', value: 'fast', icon: 'Zap' },
-      { text: 'Balanced (Mix of sightseeing & relaxed afternoons)', value: 'balanced', icon: 'Compass' },
-      { text: 'Slow & Leisurely (Soak in 1 or 2 coastal/mountain regions)', value: 'slow', icon: 'Heart' }
+      { text: 'Balanced (Mix of morning sightseeing and relaxed afternoons)', value: 'balanced', icon: 'Compass' },
+      { text: 'Unhurried (Staying 3–4 days in a few special places)', value: 'slow', icon: 'Heart' },
+      { text: 'Active (Covering multiple key regions across the island)', value: 'fast', icon: 'Zap' }
     ]
   },
   {
     id: 3,
-    question: 'Who are you traveling with?',
+    question: 'Who will be traveling with you?',
     options: [
-      { text: 'Solo Explorer', value: 'solo', icon: 'User' },
-      { text: 'Couple / Honeymoon Retreat', value: 'couple', icon: 'Heart' },
-      { text: 'Family with kids', value: 'family', icon: 'Users' },
-      { text: 'Group of Friends', value: 'friends', icon: 'Smile' }
+      { text: 'Traveling Solo', value: 'solo', icon: 'User' },
+      { text: 'Couple / Honeymoon', value: 'couple', icon: 'Heart' },
+      { text: 'Family with children', value: 'family', icon: 'Users' },
+      { text: 'Small group of friends', value: 'friends', icon: 'Smile' }
     ]
   }
 ];

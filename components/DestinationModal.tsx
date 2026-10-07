@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { X, Star, Calendar, Clock, DollarSign, Compass, CheckCircle2, MapPin } from 'lucide-react';
+import { X, Star, Calendar, Clock, DollarSign, Compass, MapPin, CheckCircle2 } from 'lucide-react';
 import { Destination } from '@/lib/data';
 
 interface DestinationModalProps {
@@ -14,147 +14,183 @@ interface DestinationModalProps {
 export default function DestinationModal({ destination, onClose }: DestinationModalProps) {
   const [selectedImgIndex, setSelectedImgIndex] = useState(0);
 
+  useEffect(() => { setSelectedImgIndex(0); }, [destination]);
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) onClose();
+  };
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    if (destination) {
+      window.addEventListener('keydown', handleKey);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = '';
+    };
+  }, [onClose, destination]);
+
   if (!destination) return null;
 
-  const images = destination.gallery && destination.gallery.length > 0
-    ? destination.gallery
-    : [destination.image];
+  const images = destination.gallery?.length > 0 ? destination.gallery : [destination.image];
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200">
+    <div
+      className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 sm:p-6"
+      style={{ background: 'rgba(8,44,28,0.72)', backdropFilter: 'blur(8px)' }}
+      onClick={handleBackdropClick}
+    >
       <div
-        className="relative bg-white rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl border border-sand-200 max-h-[90vh] flex flex-col"
-        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-2xl overflow-hidden max-h-[92vh] flex flex-col"
+        style={{
+          background: '#F9F6F0',
+          borderRadius: '20px',
+          boxShadow: '0 32px 80px rgba(0,0,0,0.35)',
+          border: '1px solid rgba(255,255,255,0.3)',
+        }}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${destination.name} details`}
       >
-        {/* Header Hero Image */}
+        {/* ── Hero Image ─────────────────────────────────────────── */}
         <div className="relative h-64 sm:h-80 w-full shrink-0">
           <Image
             src={images[selectedImgIndex] || destination.image}
             alt={destination.name}
             fill
-            className="object-cover transition-all duration-300"
+            className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
-          
-          {/* Close Button */}
+          <div className="absolute inset-0 img-overlay-bottom" />
+
+          {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2.5 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md transition-colors"
-            aria-label="Close modal"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-white transition-all hover:scale-110"
+            style={{ background: 'rgba(0,0,0,0.50)', border: '1px solid rgba(255,255,255,0.25)' }}
+            aria-label="Close"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
 
-          {/* Badge & Title */}
-          <div className="absolute bottom-4 left-6 right-6 text-white">
-            <div className="flex items-center space-x-2 mb-2">
-              <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-700/90 text-emerald-200 backdrop-blur-md">
-                {destination.category}
+          {/* Category badge */}
+          <div className="absolute top-4 left-4">
+            <span
+              className="text-white text-xs font-bold px-3 py-1 rounded-full"
+              style={{ background: 'rgba(27,67,50,0.85)', border: '1px solid rgba(255,255,255,0.2)' }}
+            >
+              {destination.category}
+            </span>
+          </div>
+
+          {/* Name & rating overlay */}
+          <div className="absolute bottom-5 left-5 right-5 text-white">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold leading-tight">{destination.name}</h2>
+            <div className="flex items-center gap-3 mt-1.5 text-sm">
+              <span className="flex items-center gap-1 text-gold-300 font-semibold">
+                <Star className="w-3.5 h-3.5 fill-current" /> {destination.rating}
               </span>
-              <span className="flex items-center text-xs font-semibold bg-black/40 px-2.5 py-1 rounded-full text-amber-300">
-                <MapPin className="w-3.5 h-3.5 mr-1" />
-                {destination.province}
+              <span className="text-white/60 flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5" /> {destination.province}
               </span>
-            </div>
-            <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              {destination.name}
-            </h2>
-            <div className="flex items-center space-x-3 mt-1.5 text-sm">
-              <div className="flex items-center text-amber-400 font-bold">
-                <Star className="w-4 h-4 fill-amber-400 mr-1" />
-                {destination.rating}
-              </div>
-              <span className="text-gray-300">({destination.reviewsCount} reviews)</span>
+              <span className="text-white/45 text-xs">({destination.reviewsCount} reviews)</span>
             </div>
           </div>
         </div>
 
-        {/* Scrollable Content Body */}
-        <div className="p-6 overflow-y-auto space-y-6">
-          
-          {/* Image Thumbnails Carousel */}
+        {/* ── Scrollable Body ─────────────────────────────────────── */}
+        <div className="overflow-y-auto flex-1">
+          {/* Thumbnail strip */}
           {images.length > 1 && (
-            <div className="flex space-x-3 overflow-x-auto pb-2">
+            <div className="flex gap-2 p-4 pb-0 overflow-x-auto">
               {images.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImgIndex(idx)}
-                  className={`relative w-20 h-16 rounded-xl overflow-hidden shrink-0 border-2 transition-all ${
-                    selectedImgIndex === idx ? 'border-brand-700 scale-105 shadow-md' : 'border-transparent opacity-70 hover:opacity-100'
-                  }`}
+                  className="relative shrink-0 overflow-hidden transition-all duration-200"
+                  style={{
+                    width: '64px',
+                    height: '48px',
+                    borderRadius: '8px',
+                    border: selectedImgIndex === idx
+                      ? '2px solid #1B4332'
+                      : '2px solid transparent',
+                    opacity: selectedImgIndex === idx ? 1 : 0.55,
+                  }}
                 >
-                  <Image src={img} alt={`Thumbnail ${idx}`} fill className="object-cover" />
+                  <Image src={img} alt={`View ${idx + 1}`} fill className="object-cover" />
                 </button>
               ))}
             </div>
           )}
 
-          {/* Description */}
-          <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-            {destination.description}
-          </p>
+          <div className="p-5 sm:p-6 space-y-5">
+            {/* Description */}
+            <p className="text-gray-600 text-sm leading-relaxed">{destination.description}</p>
 
-          {/* Key Facts Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-3.5 rounded-2xl bg-sand-100 border border-sand-300/60 flex flex-col">
-              <span className="text-xs text-gray-500 flex items-center gap-1 font-medium mb-1">
-                <Calendar className="w-3.5 h-3.5 text-brand-700" /> Best Time
-              </span>
-              <span className="text-sm font-bold text-gray-800">{destination.bestTime}</span>
-            </div>
-            
-            <div className="p-3.5 rounded-2xl bg-sand-100 border border-sand-300/60 flex flex-col">
-              <span className="text-xs text-gray-500 flex items-center gap-1 font-medium mb-1">
-                <Clock className="w-3.5 h-3.5 text-brand-700" /> Duration
-              </span>
-              <span className="text-sm font-bold text-gray-800">{destination.duration}</span>
-            </div>
-
-            <div className="p-3.5 rounded-2xl bg-sand-100 border border-sand-300/60 flex flex-col">
-              <span className="text-xs text-gray-500 flex items-center gap-1 font-medium mb-1">
-                <Compass className="w-3.5 h-3.5 text-brand-700" /> Travel Style
-              </span>
-              <span className="text-sm font-bold text-gray-800">{destination.travelStyle}</span>
-            </div>
-
-            <div className="p-3.5 rounded-2xl bg-sand-100 border border-sand-300/60 flex flex-col">
-              <span className="text-xs text-gray-500 flex items-center gap-1 font-medium mb-1">
-                <DollarSign className="w-3.5 h-3.5 text-brand-700" /> Avg Budget
-              </span>
-              <span className="text-sm font-bold text-brand-700">{destination.averageBudget}</span>
-            </div>
-          </div>
-
-          {/* Top Things To Do */}
-          <div>
-            <h3 className="font-display text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600" /> Top Things To Do
-            </h3>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700">
-              {destination.topThingsToDo.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-2 bg-sand-50 p-2.5 rounded-xl border border-sand-200">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                  <span>{item}</span>
-                </li>
+            {/* Key facts */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              {[
+                { icon: Calendar,    label: 'Best Time', value: destination.bestTime },
+                { icon: Clock,       label: 'Duration',  value: destination.duration },
+                { icon: Compass,     label: 'Style',     value: destination.travelStyle },
+                { icon: DollarSign,  label: 'Budget',    value: destination.averageBudget },
+              ].map(({ icon: Icon, label, value }) => (
+                <div
+                  key={label}
+                  className="p-3 rounded-xl"
+                  style={{ background: '#F0F7F2', border: '1px solid #C2DFCE' }}
+                >
+                  <span className="text-[10px] text-gray-400 flex items-center gap-1 mb-1">
+                    <Icon className="w-3 h-3 text-brand-600" /> {label}
+                  </span>
+                  <span className="text-xs font-semibold text-gray-800">{value}</span>
+                </div>
               ))}
-            </ul>
-          </div>
-
-          {/* Action Footer Button */}
-          <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-              <span className="text-xs text-gray-500">Starting from</span>
-              <div className="text-2xl font-extrabold text-brand-700 font-display">
-                ${destination.pricePerPerson} <span className="text-xs font-normal text-gray-500">/ person</span>
-              </div>
             </div>
-            <Link
-              href={`/planner?dest=${destination.id}`}
-              onClick={onClose}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-brand-700 hover:bg-brand-800 text-white font-bold text-sm shadow-lg hover:shadow-brand-800/30 transition-all text-center"
+
+            {/* Things to do */}
+            <div>
+              <h3 className="font-display font-bold text-base text-gray-900 mb-3 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-brand-600" /> Top Things to Do
+              </h3>
+              <ul className="space-y-2">
+                {destination.topThingsToDo.map((item, idx) => (
+                  <li
+                    key={idx}
+                    className="flex items-start gap-2.5 text-sm text-gray-600 p-2.5 rounded-xl"
+                    style={{ background: 'rgba(27,67,50,0.04)', border: '1px solid rgba(27,67,50,0.08)' }}
+                  >
+                    <span className="w-5 h-5 rounded-full bg-brand-700 text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                      {idx + 1}
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* CTA footer */}
+            <div
+              className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4"
+              style={{ borderTop: '1px solid #E8DFD0' }}
             >
-              Plan This Trip
-            </Link>
+              <div>
+                <span className="text-[10px] text-gray-400 uppercase tracking-wider block">Starting from</span>
+                <span className="font-display text-2xl font-bold text-brand-700">
+                  ${destination.pricePerPerson}
+                  <span className="text-xs font-normal text-gray-400 ml-1">/ person</span>
+                </span>
+              </div>
+              <Link
+                href={`/planner?dest=${destination.id}`}
+                onClick={onClose}
+                className="btn-yellow w-full sm:w-auto text-sm"
+              >
+                Plan This Trip
+              </Link>
+            </div>
           </div>
         </div>
       </div>
